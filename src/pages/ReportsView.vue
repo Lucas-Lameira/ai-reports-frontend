@@ -124,8 +124,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { marked } from "marked";
 
 import { jsPDF } from "jspdf";
