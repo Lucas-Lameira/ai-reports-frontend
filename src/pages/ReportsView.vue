@@ -18,13 +18,9 @@
             </v-avatar>
           </template>
 
-          <v-list-item-title>
-            {{ relatorio.nome }}
-          </v-list-item-title>
+          <v-list-item-title>{{ relatorio.nome }}</v-list-item-title>
 
-          <v-list-item-subtitle>
-            {{ relatorio.data }}
-          </v-list-item-subtitle>
+          <v-list-item-subtitle>{{ relatorio.data }}</v-list-item-subtitle>
 
           <template #append>
             <v-chip
@@ -50,18 +46,18 @@
 
     <v-card-actions class="d-flex justify-space-between">
         <v-btn
-            variant="outlined"
-            color="secondary"
-            @click="voltar"
+          variant="outlined"
+          color="secondary"
+          @click="voltar"
         >
-            Voltar
+          Voltar
         </v-btn>
 
         <v-btn
-            color="primary"
-            @click="gerarPDF"
+          color="primary"
+          @click="gerarPDF"
         >
-            Gerar PDF
+          Gerar PDF
         </v-btn>
 
     </v-card-actions>
@@ -79,13 +75,11 @@
         <v-divider />
 
         <v-card-text class="relatorio-texto">
-            <!--   <pre>{{ relatorioSelecionado?.relatorio }}</pre> -->
-            <div
-                class="relatorio-texto"
-                v-html="renderMarkdown(relatorioSelecionado?.relatorio || '')"
-            />
+          <div
+            class="relatorio-texto"
+            v-html="renderMarkdown(relatorioSelecionado?.relatorio || '')"
+          />
         </v-card-text>
-
 
         <v-divider />
 
@@ -104,42 +98,33 @@
     <!-- MODAL TO EXIT SCREEN -->
     <v-dialog v-model="dialogConfirmarSaida" max-width="400">
         <v-card>
+            <v-card-title>Sair sem gerar PDF?</v-card-title>
 
-            <v-card-title>
-            Sair sem gerar PDF?
-            </v-card-title>
-
-            <v-card-text>
-            Os relatórios serão perdidos se você voltar sem gerar o PDF.
-            Deseja continuar?
-            </v-card-text>
+            <v-card-text>Os relatórios serão perdidos se você voltar sem gerar o PDF. Deseja continuar?</v-card-text>
 
             <v-card-actions class="justify-end">
 
             <v-btn
-                variant="text"
-                @click="dialogConfirmarSaida = false"
+              variant="text"
+              @click="dialogConfirmarSaida = false"
             >
-                Cancelar
+              Cancelar
             </v-btn>
 
             <v-btn
-                color="error"
-                @click="confirmarSaida"
+              color="error"
+              @click="confirmarSaida"
             >
-                Sim, sair
+              Sim, sair
             </v-btn>
-
-            </v-card-actions>
-
+          </v-card-actions>
         </v-card>
     </v-dialog>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { marked } from "marked";
 
 import { jsPDF } from "jspdf";
@@ -160,12 +145,12 @@ const dialog = ref(false);
 const relatorioSelecionado = ref<Relatorio | null>(null);
 const relatorios = ref<Relatorio[]>([]);
 
-const renderMarkdown = (texto: string) => {
-  return marked.parse(texto);
+const renderMarkdown = (texto: string): string => {
+  return marked.parse(texto, { async: false }) as string;
 };
 
-const markdownParaTexto = (markdown: string) => {
-  const html = marked.parse(markdown);
+const markdownParaTexto = (markdown: string): string => {
+  const html = marked.parse(markdown, { async: false }) as string;
   const temp = document.createElement("div");
   temp.innerHTML = html;
   return temp.innerText;
@@ -189,7 +174,7 @@ const gerarDataArquivo = () => {
 const copiarRelatorio = async () => {
   if (!relatorioSelecionado.value) return;
 
-  const html = renderMarkdown(relatorioSelecionado.value.relatorio);
+  const html = renderMarkdown(relatorioSelecionado.value.relatorio);  
   const text = relatorioSelecionado.value.relatorio;
 
   const blobHtml = new Blob([html], { type: "text/html" });

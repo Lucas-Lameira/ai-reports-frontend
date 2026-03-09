@@ -143,7 +143,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { gerarRelatoriosBatch } from "@/api/service";
@@ -264,6 +264,11 @@ const gerarRelatorios = async (): Promise<void> => {
 const restaurarPrompt = (): void => {
   promptAtual.value = promptPadrao;
 };
+
+onMounted(() => {
+  fetch(import.meta.env.VITE_API_URL + "/health")
+    .catch(() => {});
+});
 </script>
 
 <style scoped>
